@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 
 
 Route::post('/signup', [AuthController::class, 'signup']);
-Route::post('/singin', [AuthController::class, 'signin']);
+Route::post('/signin', [AuthController::class, 'signin']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
