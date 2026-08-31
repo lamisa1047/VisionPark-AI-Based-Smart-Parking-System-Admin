@@ -4,7 +4,14 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "php": "php artisan",
+        "key": "npm run php key:generate",
+        "serve": "npm run php serve",
+        "migrate": "npm run php migrate",
+        "watch": "concurrently \"npm run dev\" \"npm run serve\"",
+        "log": "tail -f storage/logs/laravel.log",
+        "clear": "php artisan config:clear && php artisan route:clear && php artisan cache:clear"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
