@@ -1,17 +1,23 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-
+use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\SlotController;
+use App\Http\Controllers\Api\VehicleController;
+use Illuminate\Support\Facades\Route;
 
 Route::post('/signup', [AuthController::class, 'signup']);
-Route::post('/signin', [AuthController::class, 'signin']);
+Route::post('/singin', [AuthController::class, 'signin']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-});
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+    Route::post('/vehicle', [VehicleController::class, 'store']);
+    Route::get('/vehicles', [VehicleController::class, 'index']);
+    Route::delete('/vehicle/{id}', [VehicleController::class, 'destroy']);
+
+    Route::get('/parking-slots', [SlotController::class, 'index']);
+
+    Route::post('/booking/{slot_id}', [BookingController::class, 'store']);
+    Route::get('/bookings', [BookingController::class, 'index']);
+});
