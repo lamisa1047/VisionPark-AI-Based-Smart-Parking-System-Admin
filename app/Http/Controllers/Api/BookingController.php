@@ -53,14 +53,14 @@ class BookingController extends Controller
                 'exit_time' => $request->exit_time,
             ]);
 
-            $slot->update(['status' => 'occupied']);
+            $slot->update(['status' => 'booked']);
 
             return response()->json([
                 'message' => 'Booking created successfully',
                 'booking' => $booking,
             ], 200);
         } catch (Throwable $e) {
-            return response()->json(['message' => 'Server error'], 500);
+            return response()->json(['message' => $e], 500);
         }
     }
 
@@ -73,6 +73,33 @@ class BookingController extends Controller
 
             return response()->json([
                 'bookings' => $bookings,
+            ], 200);
+        } catch (Throwable $e) {
+            return response()->json(['message' => 'Server error'], 500);
+        }
+    }
+
+    public function close(Request $request, $booking_id)
+    {
+        try {
+            $booking = Booking::whereHas('vehicle', function ($query) use ($request) {
+                $query->where('user_id', $request->user()->id);
+            })->with('slot')->find($booking_id);
+
+            if (! $booking) {
+                return response()->json(['message' => 'Booking not found'], 404);
+            }
+
+            if (! $booking->exit_time) {
+                $booking->update(['exit_time' => now()]);
+            }
+
+            $booking->slot->update(['status' => 'open']);
+            $booking->update(['exit_time' => now()]);
+
+            return response()->json([
+                'message' => 'Booking closed successfully',
+                'booking' => $booking->fresh(['vehicle', 'slot']),
             ], 200);
         } catch (Throwable $e) {
             return response()->json(['message' => 'Server error'], 500);

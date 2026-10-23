@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\VehicleController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/signup', [AuthController::class, 'signup']);
-Route::post('/singin', [AuthController::class, 'signin']);
+Route::post('/signin', [AuthController::class, 'signin']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -18,6 +18,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/parking-slots', [SlotController::class, 'index']);
 
+    Route::post('/booking/{booking_id}/close', [BookingController::class, 'close']);
     Route::post('/booking/{slot_id}', [BookingController::class, 'store']);
     Route::get('/bookings', [BookingController::class, 'index']);
 });

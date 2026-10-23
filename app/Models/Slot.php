@@ -16,4 +16,6 @@ class Slot extends Model
     {
         return $this->hasMany(Booking::class);
     }
+
+    public $timestamps = false;
 }
